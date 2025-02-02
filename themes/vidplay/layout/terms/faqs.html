@@ -1,0 +1,60 @@
+<div class="wo_about_wrapper_parent">
+	<div class="wo_about_wrapper"></div>
+</div>
+<div class="pt_page_margin">
+	<div class="mat_header">
+		<h1>{{LANG faqs}}</h1>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="terms_sidebar pt_shadow">
+				<ul>
+					<li><a href="{{LINK terms/about-us}}" data-load="?link1=terms&type=about-us">{{LANG about_us}}</a></li>
+					<li><a href="{{LINK terms/terms}}" data-load="?link1=terms&type=terms">{{LANG terms_of_use}}</a></li>
+					<li><a href="{{LINK terms/privacy-policy}}" data-load="?link1=terms&type=privacy-policy">{{LANG privacy_policy}}</a></li>
+					<li class="active"><a href="{{LINK terms/faqs}}" data-load="?link1=terms&type=faqs">{{LANG faqs}}</a></li>
+					<li><a href="{{LINK terms/refund-policy}}" data-load="?link1=terms&type=refund-policy">{{LANG refund_policy}}</a></li>
+					<hr>
+					<li><a href="{{LINK contact-us}}" data-load="?link1=contact">{{LANG contact_us}}</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="termsofuse pt_shadow">
+				<section id="accordion" class="tube_faq">
+					<?php
+						$faqs = $db->orderBy('id', 'DESC')->get(T_FAQS);
+
+						foreach ($faqs as $faq) {
+						$faq->time   = PT_Time_Elapsed_String($faq->time);
+					?>
+						<div class="accordion">
+							<div id="faqs-<?php echo $faq->id;?>" class="accordion-item">
+								<div class="btn btn-default">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
+								</div>
+								<div class="card">
+									<h4>
+										<?php echo $faq->question;?>
+									</h4>
+									<div class="accordion-panel" id="faq-<?php echo $faq->id;?>">
+										<p><?php echo $faq->answer;?></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
+				</section>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function() {
+	$(".accordion-item").click(function() {
+		// Toggle the item
+		$(this).toggleClass("is-active").find(".accordion-panel").slideToggle("ease-out");
+	});
+});
+</script>

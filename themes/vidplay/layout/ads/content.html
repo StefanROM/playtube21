@@ -1,0 +1,84 @@
+<link href="{{CONFIG theme_url}}/js/lib/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<script src="{{CONFIG theme_url}}/js/lib/jquery-datatable/jquery.dataTables.js"></script>
+<script src="{{CONFIG theme_url}}/js/lib/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+
+<?php echo PT_LoadPage('third-party/paypal-demo'); ?>
+<div class="vp_links_header">
+	<ul class="pull-left">
+		<li class="<?php echo ($pt->page == 'user_ads') ? 'active': '';?>"><a href="{{LINK ads}}" data-load="?link1=ads">{{LANG ads}}</a></li>
+		<li><a href="{{LINK wallet}}" data-load="?link1=wallet">{{LANG wallet}} ({{CURRENCY}}{{ME wallet}})</a></li>
+		<li><a href="{{LINK wallet}}" data-load="?link1=wallet">{{LANG balance}} ({{CURRENCY}}{{ME balance}})</a></li>
+	</ul>
+	<span class="btn btn_primary pull-right">
+		<a href="{{LINK ads/create}}" data-load="?link1=create_ads" title="{{LANG create_ad}}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg> {{LANG create_ad}}</a>
+	</span>
+</div>
+
+<div class="alert alert-warning">
+	<p><?php echo(str_replace('{sitename}', $pt->config->name, $lang_array['your_balance_shows'])); ?></p>
+	<p><?php echo(str_replace('{sitename}', $pt->config->name, $lang_array['your_wallet_shows'])); ?></p>
+	<p>{{LANG your_money_shows}}</p>
+</div>
+				
+<div class="user-ads-list-container">
+	<div class="col-10">
+		<table class="table" id="pt-user-ads-table"> 
+			<thead>
+				<th>{{LANG status}}</th>
+				<th>{{LANG category}}</th>
+				<th>{{LANG name}}</th>
+				<th>{{LANG results}}</th>
+				<th>{{LANG spent}}</th>
+				<th>{{LANG action}}</th>
+			</thead>
+			<tbody>{{ADS_LIST}}</tbody>
+		</table>
+	</div>
+</div>
+
+<script>
+	
+	$(document).ready( function () {
+	    $('#pt-user-ads-table').DataTable();
+		$('#pt-user-ads-table').on( 'page.dt', function () {
+		    PT_Delay(function(){
+		    },50)
+		});
+	});
+
+	function PT_DeleteAd(id){
+		if (!id) {
+			return false;
+		}
+		swal({
+		  title: '{{LANG confirmation}}',
+		  text: "{{LANG confirm_delete_ad}}",
+		  type: 'warning',
+		  showCloseButton: true,
+		  showCancelButton: false,
+		  focusConfirm: false,
+		  confirmButtonText:"{{LANG delete}}",
+		  buttonsStyling:false,
+		  confirmButtonClass:'btn btn-success margin-right',
+		  allowOutsideClick:true,
+		}).then(function (){
+			$.post('{{LINK aj/ads/delete}}', {id:id}, function(data, textStatus, xhr) {/* pass */});
+			$("tr[data-ads-list='"+id+"']").slideUp(function(){
+				$(this).remove();
+				swal({
+					title:'{{LANG deleted}}',
+				    type:'success',
+				    buttonsStyling:false,
+				    confirmButtonClass:'btn btn-success',
+				});
+			});
+		});
+	}
+
+	function PT_ToggleAdsStatus(id){
+		if (!id) {
+			return false;
+		}
+		$.post('{{LINK aj/ads/toggle-stat}}', {id:id}, function(data, textStatus, xhr) {/* pass */});
+	}
+</script>

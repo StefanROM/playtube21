@@ -1,0 +1,9 @@
+<div class="ref" id="<?php echo $pt->ref->id;?>">
+	<div class="ref-image">
+		<a href="<?php echo $pt->ref->url;?>"><img src="<?php echo $pt->ref->avatar;?>" alt="Image"></a>
+	</div>
+	<div class="name">
+		<p><a href="<?php echo $pt->ref->url;?>"><?php echo $pt->ref->name;?></a></p>
+		<div class="joined">{{LANG joined}}: <?php echo PT_Time_Elapsed_String($pt->ref->time);?></div>
+	</div>
+</div>
